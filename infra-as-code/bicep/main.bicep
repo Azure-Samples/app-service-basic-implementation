@@ -1,9 +1,9 @@
 @description('The location in which all resources should be deployed.')
 param location string = resourceGroup().location
 
-@description('This is the base name for each Azure resource name (6-12 chars)')
-@minLength(6)
-@maxLength(12)
+@description('This is the base name for each Azure resource name (3-6 chars)')
+@minLength(3)
+@maxLength(6)
 param baseName string
 
 @description('The administrator username of the SQL server')
@@ -16,7 +16,7 @@ param sqlAdministratorLoginPassword string
 var logWorkspaceName = 'log-${baseName}'
 
 // ---- Log Analytics workspace ----
-resource logWorkspace 'Microsoft.OperationalInsights/workspaces@2022-10-01' = {
+resource logWorkspace 'Microsoft.OperationalInsights/workspaces@2025-07-01' = {
   name: logWorkspaceName
   location: location
   properties: {
