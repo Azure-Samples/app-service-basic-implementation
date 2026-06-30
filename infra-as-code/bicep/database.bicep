@@ -1,7 +1,7 @@
 /*
   Deploy a SQL server with a sample database, a private endpoint and a private DNS zone
 */
-@description('This is the base name for each Azure resource name (6-12 chars)')
+@description('This is the base name for each Azure resource name (3-6 chars)')
 param baseName string
 
 @description('The resource group location')
