@@ -110,6 +110,7 @@ After you have finished exploring the AppService reference implementation, it is
 ```bash
 az group delete --name $RESOURCE_GROUP -y
 ```
+
 ## Contributions
 
 Please see our [contributor guide](./CONTRIBUTING.md).
