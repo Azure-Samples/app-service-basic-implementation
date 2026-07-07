@@ -2,7 +2,9 @@
   Deploy a web app with a managed identity, diagnostic, and a private endpoint
 */
 
-@description('This is the base name for each Azure resource name (6-12 chars)')
+@description('This is the base name for each Azure resource name (3-6 chars)')
+@minLength(3)
+@maxLength(6)
 param baseName string
 
 @description('The resource group location')
@@ -29,20 +31,20 @@ var appServicePlanSettings = {
 
 
 // ---- Existing resources ----
-resource logWorkspace 'Microsoft.OperationalInsights/workspaces@2022-10-01' existing = {
+resource logWorkspace 'Microsoft.OperationalInsights/workspaces@2025-07-01' existing = {
   name: logWorkspaceName
 }
 
 // ---- Web App resources ----
 
 // Managed Identity for App Service
-resource appServiceManagedIdentity 'Microsoft.ManagedIdentity/userAssignedIdentities@2023-01-31' = {
+resource appServiceManagedIdentity 'Microsoft.ManagedIdentity/userAssignedIdentities@2024-11-30' = {
   name: appServiceManagedIdentityName
   location: location
 }
 
 //App service plan
-resource appServicePlan 'Microsoft.Web/serverfarms@2022-09-01' = {
+resource appServicePlan 'Microsoft.Web/serverfarms@2025-03-01' = {
   name: appServicePlanName
   location: location
   sku: appServicePlanSettings[appServicePlanStandardSku]
@@ -53,7 +55,7 @@ resource appServicePlan 'Microsoft.Web/serverfarms@2022-09-01' = {
 }
 
 // Web App
-resource webApp 'Microsoft.Web/sites@2022-09-01' = {
+resource webApp 'Microsoft.Web/sites@2025-03-01' = {
   name: appName
   location: location
   kind: 'app'
@@ -78,7 +80,7 @@ resource webApp 'Microsoft.Web/sites@2022-09-01' = {
 }
 
 // App Settings
-resource appsettings 'Microsoft.Web/sites/config@2022-09-01' = {
+resource appsettings 'Microsoft.Web/sites/config@2025-03-01' = {
   name: 'appsettings'
   parent: webApp
   properties: {
@@ -96,10 +98,6 @@ resource appServicePlanDiagSettings 'Microsoft.Insights/diagnosticSettings@2021-
       {
         category: 'AllMetrics'
         enabled: true
-        retentionPolicy: {
-          days: 7
-          enabled: true
-        }
       }
     ]
   }
@@ -116,38 +114,22 @@ resource webAppDiagSettings 'Microsoft.Insights/diagnosticSettings@2021-05-01-pr
         category: 'AppServiceHTTPLogs'
         categoryGroup: null
         enabled: true
-        retentionPolicy: {
-          days: 7
-          enabled: true
-        }
       }
       {
         category: 'AppServiceConsoleLogs'
         categoryGroup: null
         enabled: true
-        retentionPolicy: {
-          days: 7
-          enabled: true
-        }
       }
       {
         category: 'AppServiceAppLogs'
         categoryGroup: null
         enabled: true
-        retentionPolicy: {
-          days: 7
-          enabled: true
-        }
       }
     ]
     metrics: [
       {
         category: 'AllMetrics'
         enabled: true
-        retentionPolicy: {
-          days: 7
-          enabled: true
-        }
       }
     ]
   }

@@ -1,7 +1,9 @@
 /*
   Deploy a SQL server with a sample database, a private endpoint and a private DNS zone
 */
-@description('This is the base name for each Azure resource name (6-12 chars)')
+@description('This is the base name for each Azure resource name (3-6 chars)')
+@minLength(3)
+@maxLength(6)
 param baseName string
 
 @description('The resource group location')
@@ -9,6 +11,7 @@ param location string = resourceGroup().location
 
 @description('The administrator username of the SQL server')
 param sqlAdministratorLogin string
+
 @description('The administrator password of the SQL server.')
 @secure()
 param sqlAdministratorLoginPassword string
@@ -21,7 +24,7 @@ var sqlConnectionString = 'Server=tcp:${sqlServerName}${environment().suffixes.s
 // ---- Sql resources ----
 
 // sql server
-resource sqlServer 'Microsoft.Sql/servers@2021-11-01' = {
+resource sqlServer 'Microsoft.Sql/servers@2025-01-01' = {
   name: sqlServerName
   location: location
   tags: {
@@ -36,7 +39,7 @@ resource sqlServer 'Microsoft.Sql/servers@2021-11-01' = {
   }
 }
 
-resource sqlServer_AllowAllWindowsAzureIps 'Microsoft.Sql/servers/firewallRules@2022-05-01-preview' = {
+resource sqlServer_AllowAllWindowsAzureIps 'Microsoft.Sql/servers/firewallRules@2025-01-01' = {
   name: 'AllowAllWindowsAzureIps'
   parent: sqlServer
   properties: {
@@ -46,7 +49,7 @@ resource sqlServer_AllowAllWindowsAzureIps 'Microsoft.Sql/servers/firewallRules@
 }
 
 //database
-resource slqDatabase 'Microsoft.Sql/servers/databases@2021-11-01' = {
+resource slqDatabase 'Microsoft.Sql/servers/databases@2025-01-01' = {
   name: sampleSqlDatabaseName
   parent: sqlServer
   location: location
